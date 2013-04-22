@@ -1,0 +1,22 @@
+;; game matrices: each game starts with the number of row
+;; actions and the second number is the number of column actions
+;; then the game matrix first number is row player payout
+;; second number is column player payout.
+
+
+1000000 ;; will go to to the cell with (3 2) using phc :gamma 0.1 :alpha 0.3 :delta 0.1
+(
+	(2 2 ((1 0 (1)) (3 2 (1))
+	      (2 1 (1)) (4 0 (1)))) ;; Stackleberg game with transition prob. of 1 to come back to this game.
+)
+(:builder build-phc :gamma 0.1 :alpha 0.3 :delta 0.1)
+(:builder build-phc :gamma 0.1 :alpha 0.3 :delta 0.1)
+
+
+;; so the idea is that I will put the stoch. game first then I will be able to look
+;; at each game and the length of each of the dimensions like the (2 2... is 2 since
+;; there are two 2's.  After the dimensions then I can have a list that lists the
+;; index of the agents playing in that game.
+
+
+

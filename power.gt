@@ -1,0 +1,88 @@
+;; agents
+;(:builder build-phc :gamma 0.95 :alpha 0.3 :delta 0.2)
+;(:builder build-phc :gamma 0.95 :alpha 0.3 :delta 0.2)
+
+
+
+;; game matrices: each game starts with the number of row
+;; actions and the second number is the number of column actions
+;; then the game matrix first number is row player payout
+;; second number is column player payout.
+1000000
+(
+	;; row = producer
+	;; column = consumer
+
+	;; state 0
+	;; first initial state is a good state like a tranquil late summer day
+	(4 4 ; buy	   buy a lot	sell	       sell a lot  
+	     ((0 0 (0.35 0.25 0.15 .25)) (5 -20 (0.35 0.25 0.15 .25)) (-2 1 (0.35 0.25 0.15 .25)) (-4 2 (0.35 0.25 0.15 .25))   ; buy
+	      (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25))   (-4 1 (0.35 0.25 0.15 .25)) (-4 2 (0.35 0.25 0.15 .25))   ; buy a lot
+	      (10 -20 (0.35 0.25 0.15 .25)) (10 -40 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)) (5 1 (0.35 0.25 0.15 .25))   ; sell
+	      (20 -20 (0.35 0.25 0.15 .25)) (20 -40 (0.35 0.25 0.15 .25)) (10 -5 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)))) ; sell a lot
+
+	;; state 1
+	;; sunny day in the winter but still cold
+	;; producer will make more and sell at same price.
+	(4 4 ; buy	   buy a lot	sell	       sell a lot  
+	     ((0 0 (0.35 0.25 0.15 .25)) (5 -20 (0.35 0.25 0.15 .25)) (-2 1 (0.35 0.25 0.15 .25)) (-4 2 (0.35 0.25 0.15 .25))   ; buy
+	      (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25))   (-4 1 (0.35 0.25 0.15 .25)) (-4 2 (0.35 0.25 0.15 .25))   ; buy a lot
+	      (15 -20 (0.35 0.25 0.15 .25)) (15 -40 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)) (5 1 (0.35 0.25 0.15 .25))   ; sell
+	      (25 -20 (0.35 0.25 0.15 .25)) (25 -40 (0.35 0.25 0.15 .25)) (10 -5 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)))) ; sell a lot
+
+	;; state 2
+	;; blackout everyone loses. 
+	;; producer has negative because if the consumer is trying to buy that
+	;; means the producer is losing money.
+	;; when a blackout can't sell back to producer
+	(4 4 ; buy	                       buy a lot	           sell  	               sell a lot  
+	     ((0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25))   ; buy
+	      (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25))   (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25))   ; buy a lot
+	      (-20 0 (0.35 0.25 0.15 .25)) (0 -40 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25))   ; sell
+	      (-20 0 (0.35 0.25 0.15 .25)) (0 -40 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)))) ; sell a lot
+
+	;; state 3
+	;; Freezing cloudy day no wind prices increase
+	;; but profits remain the same as state 0 since no alt. energy was used.
+	(4 4 ; buy	   buy a lot	sell	       sell a lot  
+	     ((0 0 (0.35 0.25 0.15 .25)) (5 30 (0.35 0.25 0.15 .25)) (-3 1 (0.35 0.25 0.15 .25)) (-8 4 (0.35 0.25 0.15 .25))   ; buy
+	      (0 0 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25))   (-5 1 (0.35 0.25 0.15 .25)) (-8 4 (0.35 0.25 0.15 .25))   ; buy a lot
+	      (10 -30 (0.35 0.25 0.15 .25)) (10 -50 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)) (5 1 (0.35 0.25 0.15 .25))   ; sell
+	      (20 -30 (0.35 0.25 0.15 .25)) (20 -50 (0.35 0.25 0.15 .25)) (10 -6 (0.35 0.25 0.15 .25)) (0 0 (0.35 0.25 0.15 .25)))) ; sell a lot
+
+
+
+;; power grid producer which uses alternative energy is the row player
+;; the column player is the consumer who can buy electricity as well as
+;; sell it back.  This is a competitive game to see who can make the most
+;; money.  The stochasticity comes from weather which influences how much
+;; the producer can produce. So, on a sunny day the price may be lower
+;; because of solar panels.  Since the transitions are based on the joint
+;; actions the state may transition to a state where we have a blackout
+;; or due to the weather an increase in demand that causes prices to be high.
+;;
+;; buy, buy a lot, sell, sell a lot each player has these 
+;; The goal of the game is to see if each player can optimize
+;; their payout such that the producer is not losing utility
+;; and the consumer is as close to zero utility as possible.
+;;
+;; For the consumer they want to buy as little as possible in order
+;; to sell it to the citizens at a profit based on how much they
+;; pay the producer.
+;;
+;; another game to look at is if their are two buyers and one seller.
+)
+
+;(:builder build-wolf :gamma 0.1 :alpha 0.1 :delta 0.0 :deltaw .05 :deltal .1 :epsilon .001)
+;(:builder build-wolf :gamma 0.1 :alpha 0.1 :delta 0.0 :deltaw .05 :deltal .1 :epsilon .001)
+
+
+(:builder build-phc :gamma 0.01 :alpha 0.1 :delta 0.1)
+(:builder build-phc :gamma 0.01 :alpha 0.1 :delta 0.1)
+
+
+;(:builder build-lenient :maxtemp 500 :alpha 2 :beta 2.5 :delta 0.995 :lambda .95 :gamma 1.0)
+;(:builder build-lenient :maxtemp 500 :alpha 2 :beta 2.5 :delta 0.995 :lambda .95 :gamma 1.0)
+
+;(:builder build-wolf :gamma 0.1 :alpha 0.1 :delta 0.0 :deltaw .1 :deltal .2)
+;(:builder build-wolf :gamma 0.1 :alpha 0.1 :delta 0.0 :deltaw .1 :deltal .2)
